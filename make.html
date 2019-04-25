@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>PMH Studio URL Shorter Service</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+          <div class="jumbotron rounded-bottom bg-danger text-white">
+            <h1>PMH Studio URL 단축 서비스</h1>
+            <hr />
+            <label for="short">단축할 URL (시작점 URL)</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="short-module">http://short.kro.kr/</span>
+              </div>
+              <input type="text" class="form-control" id="short" placeholder="ex) pmhstudio">
+            </div>
+            <label for="long">단축될 URL (도착점 URL)</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="long-module">http://</span>
+              </div>
+              <input type="text" class="form-control" id="long" placeholder="ex) pmhstudio.kro.kr">
+            </div>
+            <hr />
+            <button class="btn btn-warning" onclick="goShort()">URL 단축!</button>
+      </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+      function goShort () {
+        let short = encodeURI(document.getElementById('short').value)
+        let long = encodeURI(document.getElementById('long').value)
+
+        if (!short || !long) {
+          alert('빈칸을 모두 채워주세요')
+        } else {
+          let xhr = new XMLHttpRequest()
+          let target = 'https://api.myjson.com/bins/1cpw6g'
+          xhr.open('GET', target)
+          xhr.send()
+
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              if (xhr.status == 200) {
+                let list = JSON.parse(xhr.responseText)
+                if (!list[short]) {
+                  document.getElementById('short').value = ''
+                  document.getElementById('long').value = ''
+                  list[short] = 'http://' + long
+                  let xhrp = new XMLHttpRequest()
+                  xhrp.open('PUT', 'https://api.myjson.com/bins/1cpw6g')
+                  xhrp.setRequestHeader('Content-Type', 'application/json')
+                  xhrp.send(JSON.stringify(list))
+                  alert('삐빅, 처리 완료됨!\n출발점: http://short.kro.kr/' + decodeURI(short) + '\n도착점: http://' + decodeURI(long) + '\n확인버튼을 눌러 시작점으로 이동합니다')
+                  document.location.href = 'http://short.kro.kr/' + short
+                } else {
+                  document.getElementById('short').value = ''
+                  alert('삐빅, 이미 있는 시작점 URL!')
+                }
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
