@@ -14,12 +14,15 @@
           <div class="jumbotron rounded-bottom bg-danger text-white">
             <h1>PMH Studio URL 단축 서비스</h1>
             <hr />
-            <label for="short">단축할 URL (시작점 URL)</label>
+            <label for="short">단축할 URL (시작점 URL) ※ 한쿡어 잘되염</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="short-module">http://short.kro.kr/</span>
               </div>
               <input type="text" class="form-control" id="short" placeholder="ex) pmhstudio">
+              <div class="input-group-append">
+                  <button type="button" class="btn btn-secondary input-group-text" onclick="random()"><i class="fas fa-dice"></i></button>
+              </div>
             </div>
             <label for="long">단축될 URL (도착점 URL)</label>
             <div class="input-group mb-3">
@@ -29,7 +32,7 @@
               <input type="text" class="form-control" id="long" placeholder="ex) pmhstudio.kro.kr">
             </div>
             <hr />
-            <button class="btn btn-warning" onclick="goShort()">URL 단축!</button>
+            <button class="btn btn-primary" onclick="goShort()">URL 단축 <i class="fas fa-chevron-right"></i></button> 총 <b id="shortCount">(계산중...)</b>개의 URL이 단축됨
       </div>
     </div>
     <!-- Optional JavaScript -->
@@ -37,7 +40,32 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.1/js/all.js" integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a" crossorigin="anonymous"></script>
     <script>
+      
+      let xhr = new XMLHttpRequest()
+      let target = 'https://api.myjson.com/bins/1cpw6g'
+      xhr.open('GET', target)
+      xhr.send()
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status == 200) {
+            let list = JSON.parse(xhr.responseText)
+            document.getElementById("shortCount").innerHTML = Object.keys(list).length
+          }
+        }
+      }
+      
+      function random () {
+        let result = '', max = Math.floor(Math.random() * 3) + 5;
+        for (let counter = 0; counter < max; counter++) {
+          result += String.fromCharCode(Math.floor(Math.random() * (0xD7AF - 0xAC00 + 1)) + 0xAC00)
+        }
+
+        document.getElementById('short').value = result
+      }
+
       function goShort () {
         let short = encodeURI(document.getElementById('short').value)
         let long = encodeURI(document.getElementById('long').value)
