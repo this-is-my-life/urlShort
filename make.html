@@ -44,7 +44,7 @@
     <script>
       
       let xhr = new XMLHttpRequest()
-      let target = 'https://api.myjson.com/bins/1cpw6g'
+      let target = 'http://api.myjson.com/bins/1cpw6g'
       xhr.open('GET', target)
       xhr.send()
 
@@ -74,7 +74,7 @@
           alert('빈칸을 모두 채워주세요')
         } else {
           let xhr = new XMLHttpRequest()
-          let target = 'https://api.myjson.com/bins/1cpw6g'
+          let target = 'http://api.myjson.com/bins/1cpw6g'
           xhr.open('GET', target)
           xhr.send()
 
@@ -87,7 +87,7 @@
                   document.getElementById('long').value = ''
                   list[short] = 'http://' + long
                   let xhrp = new XMLHttpRequest()
-                  xhrp.open('PUT', 'https://api.myjson.com/bins/1cpw6g')
+                  xhrp.open('PUT', 'http://api.myjson.com/bins/1cpw6g')
                   xhrp.setRequestHeader('Content-Type', 'application/json')
                   xhrp.send(JSON.stringify(list))
                   let t = document.createElement("textarea");
