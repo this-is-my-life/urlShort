@@ -48,7 +48,7 @@ func R(w http.ResponseWriter, r *http.Request) {
 			db.QueryRow("SELECT `long` FROM shorts where short = ?", r.URL.Query().Get("short")).Scan(&long)
 			if long != "" {
 				w.WriteHeader(403)
-				fmt.Fprint(w, "<script>alert('"+r.URL.Query().Get("short")+"는 이미 있는 단축주소 입니다');window.location.replace('/')</script>")
+				fmt.Fprint(w, "<script>alert('"+r.URL.Query().Get("short")+"는 이미 있는 단축주소 입니다');window.history.back()</script>")
 				return
 			}
 
@@ -57,7 +57,7 @@ func R(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(502)
 				fmt.Fprint(w, err.Error())
 			} else {
-				fmt.Fprintf(w, "<script>alert(\"short.kro.kr%s를 %s에 연결하였습니다\");window.location.replace('/')</script>", r.URL.Query().Get("short"), r.URL.Query().Get("long"))
+				fmt.Fprintf(w, "<script>alert(\"short.kro.kr%s를 %s에 연결하였습니다\");window.history.back()</script>", r.URL.Query().Get("short"), r.URL.Query().Get("long"))
 			}
 		}
 

@@ -1,5 +1,6 @@
 create user 'urlShort'@'localhost' identified by 'urlshort';
 grant all privileges on urlShort.* to 'urlShort'@'localhost';
+create schema urlShort;
 use urlShort;
 
 create table shorts
